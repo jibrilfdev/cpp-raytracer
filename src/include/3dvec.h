@@ -1,5 +1,5 @@
-#ifndef ViEC3D_H
-#define ViEC3D_H
+#ifndef VEC3D_H
+#define VEC3D_H
 
 #include <cmath>
 #include <iostream>

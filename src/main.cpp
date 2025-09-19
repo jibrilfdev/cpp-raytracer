@@ -1,31 +1,23 @@
 #include "include/color.h"
 #include "include/ray.h"
 #include "include/3dvec.h"
+#include "include/sphere.h"
+#include "include/intersectable.h"
+#include "include/intersectable_objects.h"
 #include "include/main.h"
 
 #include <iostream>
 
 
-color ray_color(const ray& r) {
-	auto sh = sphere_intersect(point3d(0, 0, -1), 0.5, r);
-	if (sh > 0.0) {
-		vec3d v = unit_vector(r.at(sh) - vec3d(0, 0, -1));
-		return 0.5*color(v.x()+1, v.y()+1, v.z()+1);
+color ray_color(const ray& r, const intersectable& world) {
+	intersects inte;
+	if (world.intersect(r, 0, infinity, inte)) {
+		return 0.5 * (inte.normal + color(1, 1, 1));
 	}
 
 	vec3d unit_direction = unit_vector(r.direction());
 	auto a = 0.5 * (unit_direction.y() + 1.0);
 	return (1.0-a) * color(1.0,1.0,1.0) + a * color(0.5, 0.9, 1.0);
-}
-
-double sphere_intersect(const point3d& center, double radius, const ray& r) {
-	vec3d oc = center - r.origin();
-	double a = r.direction().length_squared();
-	double h = dot(r.direction(), oc);
-	double c = oc.length_squared() - radius*radius;
-	auto discriminant = h*h - a*c;
-
-	return discriminant < 0 ? -1.0 : ((h - std::sqrt(discriminant)) / (a));
 }
 
 int main() {
@@ -38,6 +30,12 @@ int main() {
 
 	int image_height = int(image_width / aspect_ratio);
 	image_height = (image_height < 1) ? 1 : image_height;
+
+	// World
+	intersectable_list world;
+
+	world.add(make_shared<sphere>(point3d(0, 0, -1), 0.5));
+	world.add(make_shared<sphere>(point3d(0, -100.5, -1), 100));
 
 	// Camera
 
@@ -70,7 +68,7 @@ int main() {
 			auto ray_direction = pixel_center - camera_center;
 			ray r(camera_center, ray_direction);
 
-			color pixel_color = ray_color(r);
+			color pixel_color = ray_color(r, world);
 			write_color(std::cout, pixel_color);
 		}
 	}

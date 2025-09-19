@@ -14,7 +14,7 @@ class sphere : public intersectable {
 		double h = dot(r.direction(), oc);
 		double c = oc.length_squared() - radius*radius;
 
-		double discriminant = h*h - a*c;
+		auto discriminant = h*h - a*c;
 		if (discriminant < 0) return false;
 
 		auto discriminant_sqrt = std::sqrt(discriminant);
@@ -22,7 +22,7 @@ class sphere : public intersectable {
 		auto root = (h - discriminant_sqrt) / a;
 		if (root <= ray_tmin || ray_tmax <= root) {
 			root = (h + discriminant_sqrt) / a;
-			if (root <= ray_tmin || ray_tmax <= root) false;
+			if (root <= ray_tmin || ray_tmax <= root) return false;
 		}
 
 		inte.t = root;
