@@ -47,7 +47,7 @@ class vec3d {
 };
 
 // Alias
-using point3 = vec3d;
+using point3d = vec3d;
 
 
 
