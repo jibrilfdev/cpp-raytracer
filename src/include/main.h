@@ -3,7 +3,7 @@
 #include "3dvec.h"
 
 // Detect sphere intersections.
-bool sphere_intersect(const point3d&, double radius, const ray& r);
+double sphere_intersect(const point3d&, double radius, const ray& r);
 
 // Determine ray color.
 color ray_color(const ray&);
