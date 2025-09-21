@@ -22,13 +22,13 @@ class intersectable_list : public intersectable {
 		objects.push_back(object);
 	}
 
-	bool intersect(const ray& r, double ray_tmin, double ray_tmax, intersects& inte) const override {
+	bool intersect(const ray& r, interval ray_t, intersects& inte) const override {
 		intersects temp_inte;
 		bool object_intersected = false;
-		auto closest = ray_tmax;
+		auto closest = ray_t.max;
 
 		for (const auto& object : objects) {
-			if (object->intersect(r, ray_tmin, closest, temp_inte)) {
+			if (object->intersect(r, interval(ray_t.min, closest), temp_inte)) {
 				object_intersected = true;
 				closest = temp_inte.t;
 				inte = temp_inte;

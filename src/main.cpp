@@ -4,6 +4,7 @@
 #include "include/sphere.h"
 #include "include/intersectable.h"
 #include "include/intersectable_objects.h"
+#include "include/constants.h"
 #include "include/main.h"
 
 #include <iostream>
@@ -11,7 +12,7 @@
 
 color ray_color(const ray& r, const intersectable& world) {
 	intersects inte;
-	if (world.intersect(r, 0, infinity, inte)) {
+	if (world.intersect(r, interval(0, infinity), inte)) {
 		return 0.5 * (inte.normal + color(1, 1, 1));
 	}
 

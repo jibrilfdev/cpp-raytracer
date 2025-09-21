@@ -2,6 +2,7 @@
 #define INTERSECTABLE_H
 
 #include "ray.h"
+#include "interval.h"
 
 class intersects {
 public:
@@ -20,7 +21,7 @@ class intersectable {
 public:
 	virtual ~intersectable() = default;
 
-	virtual bool intersect(const ray& r, double ray_tmin, double ray_tmax, intersects& inte) const = 0;
+	virtual bool intersect(const ray& r, interval ray_t, intersects& inte) const = 0;
 };
 
 #endif
