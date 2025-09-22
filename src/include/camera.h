@@ -1,5 +1,4 @@
-#ifndef CAMERA_H
-#define CAMERA_H
+#pragma once
 
 #include "intersectable.h"
 
@@ -7,6 +6,7 @@ class camera {
 	public:
 		double aspect_ratio = 1.0;
 		int image_width = 100;
+		int random_samples_per_pixel = 10; // Random samples per pixel
 
 		void render(const intersectable& world) {
 			initialize();
@@ -16,12 +16,14 @@ class camera {
 			for (int j = 0; j < image_height; ++j) {
 				std::clog << "Line generation progress: " << j << '/' << image_height << '\n' << std::flush;
 				for (int i = 0; i < image_width; ++i) {
-					auto pixel_center = first_pixel_loc + (i * pixel_delta_u) + (j * pixel_delta_v);
-					auto ray_direction = pixel_center - camera_center;
-					ray r(camera_center, ray_direction);
-
-					color pixel_color = ray_color(r, world);
-					write_color(std::cout, pixel_color);
+					color pixel_color(0, 0, 0);
+					for (int sample = 0; sample < random_samples_per_pixel; ++sample) {
+						double u = (i + random_double()) / (image_width - 1);
+						double v = (j + random_double()) / (image_height - 1);
+						ray r = get_ray(i, j);
+						pixel_color += ray_color(r, world);
+					}
+					write_color(std::cout, pixel_samples_scale * pixel_color);
 				}
 			}
 
@@ -34,10 +36,13 @@ class camera {
 		point3d first_pixel_loc; // Location of 0,0
 		vec3d pixel_delta_u;
 		vec3d pixel_delta_v;
+		double pixel_samples_scale; // Color scale factor by pixel samples.
 
 		void initialize() {
 			image_height = int(image_width / aspect_ratio);
 			image_height = (image_height < 1) ? 1 : image_height;
+
+			pixel_samples_scale = 1.0 / random_samples_per_pixel;
 
 			camera_center = point3d(0, 0, 0);
 
@@ -60,6 +65,22 @@ class camera {
 			first_pixel_loc = viewport_upper_left + 0.5 * (pixel_delta_u + pixel_delta_v);
 		}
 
+		ray get_ray(int i, int j) const {
+			// Camera ray from the origin directed to a random sample around the pixel at i, j.
+			auto offset = sample_square();
+			auto pixel_sample = first_pixel_loc + ((i + offset.x()) * pixel_delta_u) + ((j + offset.y()) * pixel_delta_v);
+
+			auto ray_origin = camera_center;
+			auto ray_direction = pixel_sample - ray_origin;
+
+			return ray(ray_origin, ray_direction);
+		}
+
+		// Returns a vector to a random point in the .5 unit square.
+		vec3d sample_square() const {
+			return vec3d(random_double() - 0.5, random_double() - 0.5, 0);
+		}
+
 		color ray_color(const ray& r, const intersectable& world) const {
 			intersects inte;
 
@@ -73,4 +94,3 @@ class camera {
 		}
 };
 
-#endif

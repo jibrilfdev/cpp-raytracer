@@ -1,5 +1,4 @@
-#ifndef INTERSECTABLE_H
-#define INTERSECTABLE_H
+#pragma once
 
 #include "ray.h"
 #include "interval.h"
@@ -24,4 +23,3 @@ public:
 	virtual bool intersect(const ray& r, interval ray_t, intersects& inte) const = 0;
 };
 
-#endif

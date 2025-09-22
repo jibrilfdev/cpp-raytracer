@@ -1,14 +1,10 @@
-#ifndef CONSTANTS_H
-#define CONSTANTS_H
+#pragma once
 
 #include <cmath>
 #include <iostream>
 #include <limits>
 #include <memory>
-
-#include "color.h"
-#include "ray.h"
-#include "3dvec.h"
+#include <random>
 
 // STD
 using std::make_shared;
@@ -23,4 +19,15 @@ const double pi = 3.1415926535897932385;
 inline double degrees_to_radians(double degrees) {
 	return degrees * pi / 180.0;
 }
-#endif
+
+// Returns a random real number in the range [0, 1).
+inline double random_double() {
+	static std::uniform_real_distribution<double> distribution(0.0, 1.0);
+	static std::mt19937 generator;
+	return distribution(generator);
+}
+
+// Returns a random real in the range [min, max)
+inline double random_double_range(double min, double max) {
+	return min + (max-min)*random_double();
+}

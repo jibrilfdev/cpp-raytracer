@@ -1,5 +1,4 @@
-#ifndef VEC3D_H
-#define VEC3D_H
+#pragma once
 
 #include <cmath>
 #include <iostream>
@@ -95,4 +94,3 @@ inline vec3d unit_vector(const vec3d& v) {
     return v / v.length();
 }
 
-#endif

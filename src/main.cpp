@@ -1,6 +1,6 @@
 #include "include/color.h"
-#include "include/ray.h"
 #include "include/3dvec.h"
+#include "include/ray.h"
 #include "include/sphere.h"
 #include "include/intersectable.h"
 #include "include/intersectable_objects.h"
@@ -20,6 +20,7 @@ int main() {
 
 	cam.aspect_ratio = 16.0 / 9.0;
 	cam.image_width = 600;
+	cam.random_samples_per_pixel = 100;
 
 	cam.render(world);
 }

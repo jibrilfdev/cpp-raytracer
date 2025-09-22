@@ -1,5 +1,4 @@
-#ifndef SPHERE_H
-#define SPHERE_H
+#pragma once
 
 #include "3dvec.h"
 #include "intersectable.h"
@@ -38,4 +37,3 @@ private:
 	double radius;
 };
 
-#endif

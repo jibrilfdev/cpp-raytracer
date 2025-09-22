@@ -1,5 +1,4 @@
-#ifndef INTERSECTABLE_OBJECTS_H
-#define INTERSECTABLE_OBJECTS_H
+#pragma once
 
 #include <memory>
 #include <vector>
@@ -39,4 +38,3 @@ class intersectable_list : public intersectable {
 	}
 };
 
-#endif

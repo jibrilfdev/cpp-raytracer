@@ -1,7 +1,6 @@
-#ifndef RAY_H
-#define RAY_H
+#pragma once
 
-#include "./3dvec.h"
+#include "3dvec.h"
 
 class ray {
   public:
@@ -21,4 +20,3 @@ class ray {
     vec3d dir;
 };
 
-#endif
