@@ -2,6 +2,7 @@
 
 #include <cmath>
 #include <iostream>
+#include "constants.h"
 
 class vec3d {
   public:
@@ -43,6 +44,17 @@ class vec3d {
     double length_squared() const {
         return e[0]*e[0] + e[1]*e[1] + e[2]*e[2];
     }
+
+	// Return random vector where each element is in the interval [0, 1).
+	static vec3d random() {
+		return vec3d(random_double(), random_double(), random_double());
+	}
+
+	// Return random vector where each element is in the interval [min, max).
+	static vec3d random(double min, double max) {
+		return vec3d(random_double_range(min,max), random_double_range(min,max), random_double_range(min,max));
+	}
+
 };
 
 // Alias
@@ -92,5 +104,20 @@ inline vec3d cross(const vec3d& u, const vec3d& v) {
 
 inline vec3d unit_vector(const vec3d& v) {
     return v / v.length();
+}
+
+inline vec3d random_unit_vector() {
+	while (true) {
+		auto t = vec3d::random(-1, 1);
+		auto lensq = t.length_squared();
+		if (1e-160 < lensq && lensq <= 1) return t / sqrt(lensq);
+	}
+}
+
+inline vec3d random_on_hemisphere(const vec3d& normal) {
+	vec3d on_unit_sphere = random_unit_vector();
+	// Check for same hemisphere as normal.
+	if (dot(on_unit_sphere, normal) > 0.0) return on_unit_sphere;
+	return -on_unit_sphere;
 }
 

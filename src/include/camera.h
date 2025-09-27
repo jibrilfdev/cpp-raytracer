@@ -85,7 +85,8 @@ class camera {
 			intersects inte;
 
 			if (world.intersect(r, interval(0, infinity), inte)) {
-				return 0.5 * (inte.normal + color(1,1,1));
+				vec3d direction = random_on_hemisphere(inte.normal);
+				return 0.5 * ray_color(ray(inte.p, direction), world);
 			}
 
 			vec3d unit_direction = unit_vector(r.direction());
