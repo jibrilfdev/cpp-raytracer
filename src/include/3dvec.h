@@ -130,3 +130,10 @@ inline vec3d random_on_hemisphere(const vec3d& normal) {
 inline vec3d reflect(const vec3d& v, const vec3d& n) {
 	return v - 2*dot(v,n)*n;
 }
+
+inline vec3d refract(const vec3d& uv, const vec3d& n, double etai_over_etat) {
+	auto cos_theta = std::fmin(dot(-uv, n), 1.0);
+	vec3d r_out_perpendicular = etai_over_etat * (uv + cos_theta*n);
+	vec3d r_out_parallel = -std::sqrt(std::fabs(1.0 - r_out_perpendicular.length_squared())) * n;
+	return r_out_perpendicular + r_out_parallel;
+}

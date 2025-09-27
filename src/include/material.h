@@ -45,3 +45,23 @@ class metal : public material {
 		color albedo;
 		double fuzz;
 };
+
+class dielectric : public material {
+	public:
+		dielectric(double refraction_index) : refraction_index(refraction_index) {}
+
+		bool scatter(const ray& r_in, const intersects& inte, color& attenuation, ray& scattered) const override {
+			attenuation = color(1.0, 1.0, 1.0);
+			double ri = inte.front_face ? (1.0 / refraction_index) : refraction_index;
+
+			vec3d unit_direction = unit_vector(r_in.direction());
+			vec3d refracted = refract(unit_direction, inte.normal, ri);
+
+			scattered = ray(inte.p, refracted);
+			return true;
+		}
+
+	private:
+		// Refractive index
+		double refraction_index;
+};
