@@ -7,6 +7,7 @@ class camera {
 		double aspect_ratio = 1.0;
 		int image_width = 100;
 		int random_samples_per_pixel = 10; // Random samples per pixel
+		int max_depth = 10; // Maximum number of ray reflections in scene
 
 		void render(const intersectable& world) {
 			initialize();
@@ -21,7 +22,7 @@ class camera {
 						double u = (i + random_double()) / (image_width - 1);
 						double v = (j + random_double()) / (image_height - 1);
 						ray r = get_ray(i, j);
-						pixel_color += ray_color(r, world);
+						pixel_color += ray_color(r, max_depth, world);
 					}
 					write_color(std::cout, pixel_samples_scale * pixel_color);
 				}
@@ -81,12 +82,15 @@ class camera {
 			return vec3d(random_double() - 0.5, random_double() - 0.5, 0);
 		}
 
-		color ray_color(const ray& r, const intersectable& world) const {
+		color ray_color(const ray& r, int depth, const intersectable& world) const {
+			// Limit bounces by depth recursion.
+			if (depth <= 0) return color(0, 0, 0);
+
 			intersects inte;
 
-			if (world.intersect(r, interval(0, infinity), inte)) {
-				vec3d direction = random_on_hemisphere(inte.normal);
-				return 0.5 * ray_color(ray(inte.p, direction), world);
+			if (world.intersect(r, interval(0.001, infinity), inte)) {
+				vec3d direction = inte.normal + random_unit_vector();
+				return 0.5 * ray_color(ray(inte.p, direction), depth-1, world);
 			}
 
 			vec3d unit_direction = unit_vector(r.direction());
