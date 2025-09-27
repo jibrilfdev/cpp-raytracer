@@ -5,7 +5,7 @@
 
 class sphere : public intersectable {
 	public:
-		sphere(const point3d& center, double radius) : center(center), radius(std::fmax(0,radius)) {}
+		sphere(const point3d& center, double radius, shared_ptr<material> mat) : center(center), radius(std::fmax(0,radius)), mat(mat) {}
 
 		bool intersect(const ray& r, interval ray_t, intersects& inte) const override {
 		vec3d oc = center - r.origin();
@@ -28,6 +28,7 @@ class sphere : public intersectable {
 		inte.p = r.at(inte.t);
 		vec3d outward_normal = (inte.p - center) / radius;
 		inte.set_face_normal(r, outward_normal);
+		inte.mat = mat;
 
 		return true;
 		}
@@ -35,5 +36,6 @@ class sphere : public intersectable {
 private:
 	point3d center;
 	double radius;
+	shared_ptr<material> mat;
 };
 

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "intersectable.h"
+#include "material.h"
 
 class camera {
 	public:
@@ -89,8 +90,10 @@ class camera {
 			intersects inte;
 
 			if (world.intersect(r, interval(0.001, infinity), inte)) {
-				vec3d direction = inte.normal + random_unit_vector();
-				return 0.5 * ray_color(ray(inte.p, direction), depth-1, world);
+				ray scattered;
+				color attenuation;
+				if (inte.mat->scatter(r, inte, attenuation, scattered)) return attenuation * ray_color(scattered, depth-1, world);
+				return color(0, 0, 0);
 			}
 
 			vec3d unit_direction = unit_vector(r.direction());

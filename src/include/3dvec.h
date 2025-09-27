@@ -45,6 +45,12 @@ class vec3d {
         return e[0]*e[0] + e[1]*e[1] + e[2]*e[2];
     }
 
+	// Return true if the vector is close to zero.
+	bool near_zero() const {
+		auto s = 1e-8;
+		return (std::fabs(e[0]) < s) && (std::fabs(e[1]) < s) && (std::fabs(e[2]) < s);
+	}
+
 	// Return random vector where each element is in the interval [0, 1).
 	static vec3d random() {
 		return vec3d(random_double(), random_double(), random_double());
@@ -121,3 +127,6 @@ inline vec3d random_on_hemisphere(const vec3d& normal) {
 	return -on_unit_sphere;
 }
 
+inline vec3d reflect(const vec3d& v, const vec3d& n) {
+	return v - 2*dot(v,n)*n;
+}

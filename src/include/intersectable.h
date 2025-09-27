@@ -3,10 +3,13 @@
 #include "ray.h"
 #include "interval.h"
 
+class material;
+
 class intersects {
 public:
 	point3d p;
 	vec3d normal;
+	shared_ptr<material> mat;
 	double t;
 	bool front_face;
 
