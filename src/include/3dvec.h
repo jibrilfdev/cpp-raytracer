@@ -120,6 +120,13 @@ inline vec3d random_unit_vector() {
 	}
 }
 
+inline vec3d random_in_unit_disk() {
+	while (true) {
+		auto p = vec3d(random_double_range(-1, 1), random_double_range(-1, 1), 0);
+		if (p.length_squared() < 1) return p;
+	}
+}
+
 inline vec3d random_on_hemisphere(const vec3d& normal) {
 	vec3d on_unit_sphere = random_unit_vector();
 	// Check for same hemisphere as normal.
