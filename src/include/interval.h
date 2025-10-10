@@ -11,6 +11,11 @@ class interval {
 
 		interval(double min, double max) : min(min), max(max) {}
 
+		interval(const interval& a, const interval& b) {
+		min = std::min(a.min, b.min);
+		max = std::max(a.max, b.max);
+	}
+
 		double size() const {
 			return max - min;
 		}
@@ -21,6 +26,11 @@ class interval {
 
 		bool surrounds(double x) const {
 			return min < x && x < max;
+		}
+
+		interval expand(double delta) const {
+			auto padding = delta/2;
+			return interval(min - padding, max + padding);
 		}
 
 		double clamp(double x) const {

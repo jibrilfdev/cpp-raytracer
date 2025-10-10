@@ -5,6 +5,7 @@
 #include "include/intersectable.h"
 #include "include/intersectable_objects.h"
 #include "include/constants.h"
+#include "include/bvh.h"
 #include "include/camera.h"
 #include "include/material.h"
 #include "include/main.h"
@@ -29,7 +30,8 @@ int main() {
                     // diffuse
                     auto albedo = color::random() * color::random();
                     sphere_material = make_shared<lambertian>(albedo);
-                    world.add(make_shared<sphere>(center, 0.2, sphere_material));
+					auto center2 = center + vec3d(0, random_double_range(0,.5), 0);
+                    world.add(make_shared<sphere>(center, center2, 0.2, sphere_material));
                 } else if (choose_mat < 0.9) {
                     // metal
                     auto albedo = color::random(0.5, 1);
@@ -54,12 +56,14 @@ int main() {
     auto material3 = make_shared<metal>(color(0.7, 0.7, 0.2), 0.0);
     world.add(make_shared<sphere>(point3d(4, 1, 0), 1.0, material3));
 
+	world = intersectable_list(make_shared<bvh_node>(world));
+
 
 	camera cam;
 
 	cam.aspect_ratio = 16.0 / 9.0;
 	cam.image_width = 1200;
-	cam.random_samples_per_pixel = 500;
+	cam.random_samples_per_pixel = 100;
 	cam.max_depth = 50;
 
 	cam.vfov = 25;

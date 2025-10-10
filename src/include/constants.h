@@ -31,3 +31,8 @@ inline double random_double() {
 inline double random_double_range(double min, double max) {
 	return min + (max-min)*random_double();
 }
+
+// Generate a random integer in the range [min, max];
+inline int random_int(int min, int max) {
+	return int(random_double_range(min, max+1));
+}

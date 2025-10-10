@@ -2,6 +2,7 @@
 
 #include "ray.h"
 #include "interval.h"
+#include "aabb.h"
 
 class material;
 
@@ -24,5 +25,7 @@ public:
 	virtual ~intersectable() = default;
 
 	virtual bool intersect(const ray& r, interval ray_t, intersects& inte) const = 0;
+
+	virtual aabb bounding_box() const = 0;
 };
 
