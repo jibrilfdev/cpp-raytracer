@@ -42,6 +42,7 @@ class sphere : public intersectable {
 		inte.p = r.at(inte.t);
 		vec3d outward_normal = (inte.p - current_center) / radius;
 		inte.set_face_normal(r, outward_normal);
+		get_sphere_uv(outward_normal, inte.u, inte.v);
 		inte.mat = mat;
 
 		return true;
@@ -52,5 +53,13 @@ private:
 	double radius;
 	shared_ptr<material> mat;
 	aabb bbox;
+
+	static void get_sphere_uv(const point3d& p, double& u, double& v) {
+		auto theta = std::acos(-p.y());
+		auto phi = std::atan2(-p.z(), p.x()) + pi;
+
+		u = phi / (2*pi);
+		v = theta / pi;
+	}
 };
 

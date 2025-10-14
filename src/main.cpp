@@ -12,11 +12,14 @@
 
 #include <iostream>
 
-int main() {
+void bouncing_spheres() {
 	intersectable_list world;
 
-    auto ground_material = make_shared<lambertian>(color(0.5, 0.5, 0.5));
-    world.add(make_shared<sphere>(point3d(0,-1000,0), 1000, ground_material));
+	auto checker = make_shared<checker_texture>(0.32, color(0.1, 0, 0), color(1.0, 0.6, 0.8));
+	world.add(make_shared<sphere>(point3d(0, -1000, 0), 1000, make_shared<lambertian>(checker)));
+
+//    auto ground_material = make_shared<lambertian>(color(0.5, 0.5, 0.5));
+//    world.add(make_shared<sphere>(point3d(0,-1000,0), 1000, ground_material));
 
     for (int a = -11; a < 11; a++) {
         for (int b = -11; b < 11; b++) {
@@ -75,4 +78,57 @@ int main() {
 	cam.focus_dist = 10.0;
 
 	cam.render(world);
+}
+
+void checkered_spheres() {
+	intersectable_list world;
+
+	auto checker = make_shared<checker_texture>(0.32, color(0.1, 0, 0), color(1.0, 0.6, 0.8));
+
+	world.add(make_shared<sphere>(point3d(0, -10, 0), 10, make_shared<lambertian>(checker)));
+	world.add(make_shared<sphere>(point3d(0, 10, 0), 10, make_shared<lambertian>(checker)));
+
+	camera cam;
+
+	cam.aspect_ratio = 16.0 / 9.0;
+	cam.image_width = 1200;
+	cam.random_samples_per_pixel = 100;
+	cam.max_depth = 50;
+
+	cam.vfov = 25;
+	cam.look_from = point3d(-12, 3, -4);
+	cam.look_at = point3d(0, 0, 0);
+	cam.vup = vec3d(0, 1, 0);
+
+	cam.defocus_angle = 0;
+
+	cam.render(world);
+}
+
+void earth() {
+	auto earth_texture = make_shared<image_texture>("earth.jpg");
+	auto earth_surface = make_shared<lambertian>(earth_texture);
+	auto globe = make_shared<sphere>(point3d(0, 0, 0), 2, earth_surface);
+
+
+
+	camera cam;
+
+	cam.aspect_ratio = 16.0 / 9.0;
+	cam.image_width = 1200;
+	cam.random_samples_per_pixel = 100;
+	cam.max_depth = 50;
+
+	cam.vfov = 25;
+	cam.look_from = point3d(0, 0, 12);
+	cam.look_at = point3d(0, 0, 0);
+	cam.vup = vec3d(0, 1, 0);
+
+	cam.defocus_angle = 0;
+
+	cam.render(intersectable_list(globe));
+}
+
+int main() {
+	earth();
 }
