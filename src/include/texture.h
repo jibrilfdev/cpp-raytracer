@@ -1,5 +1,6 @@
 #pragma once
 
+#include "perlin_noise.h"
 #include "image_reader.h"
 
 class texture {
@@ -64,4 +65,17 @@ class image_texture : public texture {
 
 	private:
 		read_image image;
+};
+
+class noise_texture : public texture {
+public:
+	noise_texture(double scale) : scale(scale) {}
+
+	color value(double u, double v, const point3d& p) const override {
+		return color(0.2, 0, 0.7) * (1 + std::sin(scale * p.z() + 10 * noise.turbulence(p, 7)));
+	}
+
+private:
+	perlin_noise noise;
+	double scale;
 };
