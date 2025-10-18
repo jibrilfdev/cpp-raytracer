@@ -8,6 +8,7 @@
 #include "include/bvh.h"
 #include "include/camera.h"
 #include "include/material.h"
+#include "include/quadrilateral.h"
 #include "include/main.h"
 
 #include <iostream>
@@ -153,6 +154,39 @@ void perlin_spheres() {
 	cam.render(world);
 }
 
+void quadrilaterals() {
+	intersectable_list world;
+
+	// Materials
+	auto left_blue = make_shared<lambertian>(color(0.2, 0.2, 1.0));
+	auto right_red = make_shared<lambertian>(color(1.0, 0.2, 0.2));
+	auto back_green = make_shared<lambertian>(color(0.2, 1.0, 0.2));
+	auto upper_pink = make_shared<lambertian>(color(1.0, 0.6, 0.8));
+	auto lower_teal = make_shared<lambertian>(color(0.2, 0.8, 0.8));
+
+	world.add(make_shared<quadrilateral>(point3d(-3, -2, 5), vec3d(0, 0, -4), vec3d(0, 4, 0), left_blue));
+	world.add(make_shared<quadrilateral>(point3d(3, -2, 1), vec3d(0, 0, 4), vec3d(0, 4, 0), right_red));
+	world.add(make_shared<quadrilateral>(point3d(-2, -2, 0), vec3d(4, 0, 0), vec3d(0, 4, 0), back_green));
+	world.add(make_shared<quadrilateral>(point3d(-2, 3, 1), vec3d(4, 0, 0), vec3d(0, 0, 4), upper_pink));
+	world.add(make_shared<quadrilateral>(point3d(-2, -3, 5), vec3d(4, 0, 0), vec3d(0, 0, -4), lower_teal));
+
+	camera cam;
+
+	cam.aspect_ratio = 1.0;
+	cam.image_width = 800;
+	cam.random_samples_per_pixel = 100;
+	cam.max_depth = 50;
+
+	cam.vfov = 90;
+	cam.look_from = point3d(0, 0, 9);
+	cam.look_at = point3d(0, 0, 0);
+	cam.vup = vec3d(0, 1, 0);
+
+	cam.defocus_angle = 0;
+
+	cam.render(world);
+}
+
 int main() {
-	perlin_spheres();
+	quadrilaterals();
 }
