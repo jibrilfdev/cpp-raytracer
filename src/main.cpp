@@ -69,6 +69,7 @@ void bouncing_spheres() {
 	cam.image_width = 1200;
 	cam.random_samples_per_pixel = 100;
 	cam.max_depth = 50;
+	cam.background = color(0.12, 0.12, 0.8);
 
 	cam.vfov = 25;
 	cam.look_from = point3d(-12, 3, -4);
@@ -95,6 +96,7 @@ void checkered_spheres() {
 	cam.image_width = 1200;
 	cam.random_samples_per_pixel = 100;
 	cam.max_depth = 50;
+	cam.background = color(0.12, 0.12, 0.8);
 
 	cam.vfov = 25;
 	cam.look_from = point3d(-12, 3, -4);
@@ -119,6 +121,7 @@ void earth() {
 	cam.image_width = 1200;
 	cam.random_samples_per_pixel = 100;
 	cam.max_depth = 50;
+	cam.background = color(0.7, 0.8, 1);
 
 	cam.vfov = 25;
 	cam.look_from = point3d(0, 0, 12);
@@ -143,6 +146,7 @@ void perlin_spheres() {
 	cam.image_width = 1600;
 	cam.random_samples_per_pixel = 100;
 	cam.max_depth = 50;
+	cam.background = color(0.7, 0.8, 1);
 
 	cam.vfov = 25;
 	cam.look_from = point3d(13, 2, 3);
@@ -176,6 +180,7 @@ void quadrilaterals() {
 	cam.image_width = 800;
 	cam.random_samples_per_pixel = 100;
 	cam.max_depth = 50;
+	cam.background = color(0.7, 0.8, 1);
 
 	cam.vfov = 90;
 	cam.look_from = point3d(0, 0, 9);
@@ -187,6 +192,95 @@ void quadrilaterals() {
 	cam.render(world);
 }
 
+void basic_light() {
+	intersectable_list world;
+
+	auto pertext = make_shared<noise_texture>(3);
+	world.add(make_shared<sphere>(point3d(0, -500, 0), 500, make_shared<lambertian>(pertext)));
+	world.add(make_shared<sphere>(point3d(0, 2, 0), 2, make_shared<lambertian>(pertext)));
+
+	auto diffuselight = make_shared<diffuse_light>(color(4, 4, 4));
+	world.add(make_shared<quadrilateral>(point3d(3, 1, -2), vec3d(2, 0, 0), vec3d(0, 2, 0), diffuselight));
+
+	camera cam;
+
+	cam.aspect_ratio = 16.0 / 9.0;
+	cam.image_width = 1600;
+	cam.random_samples_per_pixel = 100;
+	cam.max_depth = 50;
+	cam.background = color(0, 0, 0);
+
+	cam.vfov = 25;
+	cam.look_from = point3d(26, 3, 6);
+	cam.look_at = point3d(0, 2, 0);
+	cam.vup = vec3d(0, 1, 0);
+
+	cam.defocus_angle = 0;
+
+	cam.render(world);
+}
+
+void basic_light_sphere() {
+	intersectable_list world;
+
+	auto pertext = make_shared<noise_texture>(3);
+	world.add(make_shared<sphere>(point3d(0, 1000, 0), 1000, make_shared<lambertian>(pertext)));
+	world.add(make_shared<sphere>(point3d(0, 2, 0), 2, make_shared<lambertian>(pertext)));
+
+	auto diffuselight = make_shared<diffuse_light>(color(4, 4, 4));
+	world.add(make_shared<sphere>(point3d(0, 7, 0), 2, diffuselight));
+	world.add(make_shared<quadrilateral>(point3d(3, 1, -2), vec3d(2, 0, 0), vec3d(0, 2, 0), diffuselight));
+
+	camera cam;
+
+	cam.aspect_ratio = 16.0 / 9.0;
+	cam.image_width = 1600;
+	cam.random_samples_per_pixel = 100;
+	cam.max_depth = 50;
+	cam.background = color(0, 0, 0);
+
+	cam.vfov = 25;
+	cam.look_from = point3d(26, 3, 6);
+	cam.look_at = point3d(0, 2, 0);
+	cam.vup = vec3d(0, 1, 0);
+
+	cam.defocus_angle = 0;
+
+	cam.render(world);
+}
+
+void empty_cornell_box() {
+	intersectable_list world;
+
+	auto red = make_shared<lambertian>(color(0.65, 0.05, 0.05));
+	auto white = make_shared<lambertian>(color(0.73, 0.73, 0.73));
+	auto green = make_shared<lambertian>(color(0.12, 0.45, 0.15));
+	auto light = make_shared<diffuse_light>(color(15, 15, 15));
+
+	world.add(make_shared<quadrilateral>(point3d(555,0,0), vec3d(0,555,0), vec3d(0,0,555), green));
+    world.add(make_shared<quadrilateral>(point3d(0,0,0), vec3d(0,555,0), vec3d(0,0,555), red));
+    world.add(make_shared<quadrilateral>(point3d(343, 554, 332), vec3d(-130,0,0), vec3d(0,0,-105), light));
+    world.add(make_shared<quadrilateral>(point3d(0,0,0), vec3d(555,0,0), vec3d(0,0,555), white));
+    world.add(make_shared<quadrilateral>(point3d(555,555,555), vec3d(-555,0,0), vec3d(0,0,-555), white));
+    world.add(make_shared<quadrilateral>(point3d(0,0,555), vec3d(555,0,0), vec3d(0,555,0), white));
+
+    camera cam;
+
+    cam.aspect_ratio      = 1.0;
+    cam.image_width       = 600;
+    cam.random_samples_per_pixel = 200;
+    cam.max_depth         = 50;
+    cam.background        = color(0,0,0);
+
+    cam.vfov     = 40;
+    cam.look_from = point3d(278, 278, -800);
+    cam.look_at   = point3d(278, 278, 0);
+    cam.vup      = vec3d(0,1,0);
+
+    cam.defocus_angle = 0;
+
+    cam.render(world);
+}
 int main() {
-	quadrilaterals();
+	empty_cornell_box();
 }

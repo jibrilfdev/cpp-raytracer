@@ -15,6 +15,7 @@ class camera {
 		int image_width = 100;
 		int random_samples_per_pixel = 10; // Random samples per pixel
 		int max_depth = 10; // Maximum number of ray reflections in scene
+		color background; // Background color of the scene
 		double vfov = 90; // Vertical view angle
 		point3d look_from = point3d(0, 0, 0); // Point camera is looking from
 		point3d look_at = point3d(0, 0, -1); // Point camera is looking at
@@ -141,16 +142,17 @@ class camera {
 
 			intersects inte;
 
-			if (world.intersect(r, interval(0.001, infinity), inte)) {
-				ray scattered;
-				color attenuation;
-				if (inte.mat->scatter(r, inte, attenuation, scattered)) return attenuation * ray_color(scattered, depth-1, world);
-				return color(0, 0, 0);
-			}
+			if (!world.intersect(r, interval(0.001, infinity), inte)) return background;
 
-			vec3d unit_direction = unit_vector(r.direction());
-			auto a = 0.5*(unit_direction.y() + 1.0);
-			return (1.0-a)*color(1, 1, 1) + a*color(0.5, 0.7, 1);
+			ray scattered;
+			color attenuation;
+			color color_from_emission = inte.mat->emitted(inte.u, inte.v, inte.p);
+
+			if (!inte.mat->scatter(r, inte, attenuation, scattered)) return color_from_emission;
+
+			color color_from_scatter = attenuation * ray_color(scattered, depth-1, world);
+
+			return color_from_emission + color_from_scatter;
 		}
 
 		// Returns a random point in the camera defocus disk
