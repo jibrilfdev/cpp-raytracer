@@ -2,6 +2,8 @@
 
 A ray tracer written in C++ to experiment with math and computer graphics concepts. <br />
 
+![Cornell Box render](./images/26cornellbox.png)
+![Everything so far rendered image](./images/28everythingsofarscene.png)
 ![Ray tracer generated image](./images/18randomspheresmoredepth.png)
 
 ## Build Dependencies
@@ -14,7 +16,7 @@ Clone the repository locally.
 ```bash
 git clone https://github.com/jibrilfdev/cpp-raytracer.git
 cd cpp-raytracer
-g++ src/main.cpp -o main
+g++ src/main.cpp -fopenmp -o main
 ```
 
 ## Usage

@@ -14,6 +14,7 @@ class camera {
 		double aspect_ratio = 1.0;
 		int image_width = 100;
 		int random_samples_per_pixel = 10; // Random samples per pixel
+		int threads = 2; // CPU threads
 		int max_depth = 10; // Maximum number of ray reflections in scene
 		color background; // Background color of the scene
 		double vfov = 90; // Vertical view angle
@@ -26,6 +27,8 @@ class camera {
 
 		void render(const intersectable& world) {
 			initialize();
+
+			omp_set_num_threads(threads);
 
 			std::vector<color> framebuffer(image_width*image_height);
 			std::atomic<int> rows_done = 0;
