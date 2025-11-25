@@ -60,7 +60,7 @@ private:
 	}
 
 	static bool box_x_compare(const shared_ptr<intersectable> a, const shared_ptr<intersectable> b) {
-		return box_compare(a, b, 1);
+		return box_compare(a, b, 0);
 	}
 
 	static bool box_y_compare(const shared_ptr<intersectable> a, const shared_ptr<intersectable> b) {

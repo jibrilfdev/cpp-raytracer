@@ -2,9 +2,9 @@
 
 A ray tracer written in C++ to experiment with math and computer graphics concepts. <br />
 
-![Cornell Box render](./images/26cornellbox.png)
-![Everything so far rendered image](./images/28everythingsofarscene.png)
-![Ray tracer generated image](./images/18randomspheresmoredepth.png)
+## Renders
+![Cornell Box with Stanford dragon and bunny render](./images/31cornellstanfordbox.png)
+![Guitar GIF](./images/35guitargif.gif)
 
 ## Build Dependencies
 g++ <br />

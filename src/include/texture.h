@@ -72,7 +72,7 @@ public:
 	noise_texture(double scale) : scale(scale) {}
 
 	color value(double u, double v, const point3d& p) const override {
-		return color(0.2, 0, 0.7) * (1 + std::sin(scale * p.z() + 10 * noise.turbulence(p, 7)));
+		return color(0.95, 0.54, 0.66) * (1 + std::sin(scale * p.z() + 10 * noise.turbulence(p, 7)));
 	}
 
 private:
